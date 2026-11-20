@@ -5,19 +5,19 @@
 
 ## Problem
 
-Revenue in our admin dashboard did not match the sales records the payment gateway files with the tax authority as our payment agent. Both sides looked internally consistent, so the question was which label was wrong.
+Card revenue in our admin dashboard did not match the card sales the tax authority receives from the payment gateway, which reports them as our payment agent. For one month the dashboard was 67,500 KRW higher.
 
 ## What I found
 
-The gap came from a wallet payment (KakaoPay Money) that the gateway returns in a card-shaped response. Our own order records labelled it as a card, so the dashboard grouped it with card sales while the outside records did not.
+The gap was one wallet payment (KakaoPay Money) that the gateway returns in a card-shaped response. Our order record stored it as a card payment, so the dashboard counted it as card revenue. Wallet payments are not part of the gateway's card-sales filing; the wallet provider settles them.
 
 ## Decision
 
-Classify every payment from the gateway's raw approval fields (card, KakaoPay Money, Naver Pay points, Toss money, virtual account) instead of the label our system assigned at checkout.
+Classify each gateway payment from the gateway's raw approval fields (card, KakaoPay Money, Naver Pay points, Toss money, virtual account, bank transfer) instead of the method our system stored at checkout.
 
 - Classification happens when orders are read, so no schema migration was needed.
-- Every new order keeps the raw approval fields.
-- Older orders that lack them fall back to the card-company name.
+- A follow-up fix made every new online order store those raw approval fields.
+- Older orders that lack them fall back to the stored card-company name, which only recognises wallet names.
 
 ## Trade-off
 
@@ -25,5 +25,5 @@ Reading raw fields is more code than trusting one enum, and the fallback for old
 
 ## Verification
 
-- Tested against real orders from one month, not only fixtures.
-- The dashboard can now be compared line by line with the gateway's records and the wallet providers' statements.
+- Unit tests use raw gateway responses copied from real orders of that month, including the wallet payment that caused the gap.
+- The dashboard now shows separate totals for card, bank transfer and each wallet. Each total can be checked against one outside record: the gateway's tax-authority filing or that wallet provider's settlement statement. Order lists show each order's resolved method.

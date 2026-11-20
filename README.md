@@ -8,7 +8,7 @@ Client names, credentials and security-sensitive details are left out. Numbers c
 
 | # | Case | Decision in one line |
 |---|---|---|
-| 01 | [Reconcile to the gateway's raw data](cases/01-reconcile-to-raw-gateway-data.md) | Classify payments from raw approval fields, not our own labels, so revenue can be checked line by line against outside records. |
+| 01 | [Reconcile to the gateway's raw data](cases/01-reconcile-to-raw-gateway-data.md) | Classify payments from raw approval fields, not our own labels, so each revenue total can be checked against an outside record. |
 | 02 | [Approval and POS sale are separate facts](cases/02-approval-and-pos-sale-are-separate-facts.md) | A lost POS response is resolved by lookup, never by charging or cancelling again. Devices never fix money on their own. |
 | 03 | [Sell each room-night once](cases/03-sell-each-room-night-once.md) | Re-check a signed quote under a lock and claim each room-night once; never trust a client-side total. |
 
@@ -17,7 +17,7 @@ Client names, credentials and security-sensitive details are left out. Numbers c
 | # | Case | Decision in one line |
 |---|---|---|
 | 04 | [Switch the ledger per channel, not by date](cases/04-switch-the-ledger-per-channel.md) | Per-channel switches, both ledgers readable, automatic no-go checks and an additive rollback. |
-| 05 | [Consistency over zero downtime](cases/05-consistency-over-zero-downtime.md) | Freeze writes for a clean move, accept a short outage, keep the old database for 30 days. |
+| 05 | [Consistency over zero downtime](cases/05-consistency-over-zero-downtime.md) | Freeze writes for a clean move, accept a short outage, keep the old database as a fallback. |
 
 ## Data correctness and performance
 
@@ -32,7 +32,7 @@ Client names, credentials and security-sensitive details are left out. Numbers c
 | # | Case | Decision in one line |
 |---|---|---|
 | 09 | [Limit admission instead of adding capacity](cases/09-limit-admission-instead-of-adding-capacity.md) | Admit requests before synchronous dependencies rather than growing the connection pool. |
-| 10 | [Read the crash before touching the code](cases/10-read-the-crash-before-touching-the-code.md) | Separate two different kiosk boot failures with logs and Windows events before changing app code. |
+| 10 | [Make the failure visible before fixing it](cases/10-make-the-failure-visible.md) | Get the logs off an unattended kiosk first; one boot failure turned out to have several causes. |
 
 ---
 
